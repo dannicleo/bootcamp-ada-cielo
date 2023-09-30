@@ -37,6 +37,27 @@ public class ClientController {
         this.queue = new MyQueue();
     }
 
+
+    @GetMapping("/queue")
+    public ResponseEntity<List<Client>> listQueue(){
+        return new ResponseEntity<>(this.queue.list(), HttpStatus.OK);
+    }
+
+    @Operation(
+            description = "Remoção de Cliente da Fila",
+            summary = "Exclui um Cliente da fila de atendimento",
+            responses = {
+                    @ApiResponse(description = "No Content", responseCode = "204"),
+                    @ApiResponse(description = "Not found", responseCode = "404"),
+            }
+    )
+    @PutMapping("/dequeue")
+    public ResponseEntity<Void> deQueue(){
+        System.out.println("permite");
+        this.queue.dequeue();
+        return ResponseEntity.noContent().build();
+    }
+
     @Operation(
             description = "Lista clientes cadastrados",
             summary = "Retorna uma lista de Clientes",
@@ -152,24 +173,7 @@ public class ClientController {
     }
 
 
-    @GetMapping("/queue")
-    public ResponseEntity<List<Client>> listQueue(){
-        return new ResponseEntity<>(this.queue.list(), HttpStatus.OK);
-    }
 
-    @Operation(
-            description = "Remoção de Cliente da Fila",
-            summary = "Exclui um Cliente da fila de atendimento",
-            responses = {
-                    @ApiResponse(description = "No Content", responseCode = "204"),
-                    @ApiResponse(description = "Not found", responseCode = "404"),
-            }
-    )
-    @DeleteMapping("/dequeue")
-    public ResponseEntity<Void> deQueue(){
-        this.queue.dequeue();
-        return ResponseEntity.noContent().build();
-    }
 
     @ExceptionHandler(DocumentExistentException.class)
     public ResponseEntity<String> handleDocumentExistentException(DocumentExistentException e) {

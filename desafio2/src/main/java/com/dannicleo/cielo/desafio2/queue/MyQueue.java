@@ -5,7 +5,6 @@ import com.dannicleo.cielo.desafio2.exception.QueueEmptyException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class MyQueue {
 
@@ -63,26 +62,32 @@ public class MyQueue {
     }
 
     public void dequeue() {
+
+        System.out.println(this.queue.length);
         if (isEmpty()) {
             throw new QueueEmptyException("Não há pessoas na fila");
         }
 
-        Client client = queue[front];
-        front = (front + 1) % queue.length;
-        size--;
+        Client[] newQueue = new Client[this.queue.length];
+
+        for (int i = 1; i < this.size; i++){
+            newQueue[i-1] = this.queue[i];
+        }
+
+        this.queue = newQueue;
+        this.front = 0;
+        this.rear--;
+        this.size--;
     }
 
     public List<Client> list() {
-
-//      System.out.println(queue[0]);
-
         if (isEmpty()) {
             throw new QueueEmptyException("Não há pessoas na fila");
         }
         
         List<Client> clientList = new ArrayList<>();
 
-        for (int i = 0; i < this.queue.length; i++) {
+        for (int i = 0; i < this.size; i++) {
             clientList.add(this.queue[i]);
         }
 
